@@ -1,7 +1,7 @@
 class Hand < ActiveRecord::Base
   validates_presence_of :cards, :player_id, :hand_type
   after_initialize :parse_card_string
-  attr_accessor :card_values, :card_suits, :hand_value
+  attr_accessor :card_values, :card_suits, :hand_value, :pairs, :trips, :quads
 
   belongs_to :player
 
@@ -103,6 +103,22 @@ class Hand < ActiveRecord::Base
     when -1
       return -1
     when 0
+      if ["Royal Flush", "Straight Flush", "Straight", "High Card", "Flush"].include?(hand_type)
+        return @card_values.reverse <=> other.card_values.reverse
+      elsif ["Three of a Kind", "Full House"].include?(hand_type)
+        return @trips <=> other.trips
+      elsif ["Two Pair", "Pair"].include?(hand_type)
+        case @pairs.reverse <=> other.pairs.reverse
+        when -1
+          return -1
+        when 1
+          return 1
+        when 0
+          return @card_values <=> other.card_values
+        end
+      else
+        return @quads <=> other.quads
+      end
     end
   end
 end
