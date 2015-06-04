@@ -13,6 +13,7 @@ class RoundsController < ApplicationController
     if round_id.to_i > 0 && round_id.to_i <= 1000
       redirect_to "/rounds/" + round_id
     else
+      flash[:errors] = "Enter a valid round number"
       redirect_to ""
     end
   end
