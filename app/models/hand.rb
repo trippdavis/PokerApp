@@ -13,7 +13,7 @@ class Hand < ActiveRecord::Base
     @card_values_counts = {};
     @card_suits = [];
     cards_array.each do |card|
-      value = card_value(card[0..-2])
+      value = card_value(card[0])
       @card_values << card_value(value)
 
       if @card_values_counts[value]
@@ -23,7 +23,7 @@ class Hand < ActiveRecord::Base
       end
 
       @card_values_counts
-      @card_suits << card[-1]
+      @card_suits << card[1]
     end
     @card_values.sort!
 
@@ -53,6 +53,8 @@ class Hand < ActiveRecord::Base
   def card_value(val)
     if val.to_i > 0
       return val.to_i
+    elsif val == "T"
+      return 10
     elsif val == "J"
       return 11
     elsif val == "Q"
