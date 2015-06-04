@@ -4,6 +4,8 @@ class Hand < ActiveRecord::Base
   attr_accessor :card_values, :card_suits, :hand_value, :pairs, :trips, :quads
 
   belongs_to :player
+  has_one :hand_round
+  has_one :round, through: :hand_round, source: :round
 
   def parse_card_string
     cards_array = self.cards.split(" ")
