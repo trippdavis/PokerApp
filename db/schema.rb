@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150604170854) do
+ActiveRecord::Schema.define(version: 20150604171548) do
 
   create_table "hands", force: :cascade do |t|
     t.string   "cards",      null: false
@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(version: 20150604170854) do
   end
 
   add_index "hands", ["player_id"], name: "index_hands_on_player_id"
+
+  create_table "players", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "round_hands", force: :cascade do |t|
     t.integer  "round_id",   null: false
