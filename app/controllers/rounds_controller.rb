@@ -8,4 +8,13 @@ class RoundsController < ApplicationController
     @round = Round.find(params[:id])
   end
 
+  def find_show
+    round_id = params["round_id"]
+    if round_id.to_i > 0 && round_id.to_i <= 1000
+      redirect_to "/rounds/" + round_id
+    else
+      redirect_to ""
+    end
+  end
+
 end
