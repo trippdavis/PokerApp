@@ -1,0 +1,6 @@
+<h1>Round <%= @round.id %> Results:</h1>
+<h3>Winner: <%= @round.winner.name %></h3>
+<% player1_hand = @round.hands.where(player_id: 1)[0] %>
+<% player2_hand = @round.hands.where(player_id: 2)[0] %>
+<h5>Player 1 Hand: <%= player1_hand.cards %> (<%= player1_hand.hand_type %>)</h5>
+<h5>Player 2 Hand: <%= player2_hand.cards %> (<%= player2_hand.hand_type %>)</h5>
