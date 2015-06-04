@@ -97,6 +97,12 @@ class Hand < ActiveRecord::Base
 
 
   def <=>(other)
-
+    case @hand_value <=> other.hand_value
+    when 1
+      return 1
+    when -1
+      return -1
+    when 0
+    end
   end
 end
