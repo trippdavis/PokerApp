@@ -1,9 +1,12 @@
 class Hand < ActiveRecord::Base
-  validates_presence_of :cards
-  before_save :parse_cards
+  validates_presence_of :cards, :player_id, :round_id
+  before_save :parse_card_string
   attr_accessor :card_values, :card_suits, :type
 
-  def parse_cards
+  belongs_to :player
+  belongs_to :round
+
+  def parse_card_string
     cards_array = self.cards.split(" ")
     @card_values = [];
     @card_values_counts = {};
@@ -89,7 +92,4 @@ class Hand < ActiveRecord::Base
 
     "High Card"
   end
-
-
-
 end
