@@ -11,6 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150604012951) do
+
+  create_table "hands", force: :cascade do |t|
+    t.string   "cards",      null: false
+    t.integer  "player_id",  null: false
+    t.string   "hand_type",  null: false
+    t.boolean  "winner"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "hands", ["player_id"], name: "index_hands_on_player_id"
+
+  create_table "rounds", force: :cascade do |t|
+    t.integer  "player_1_hand_id", null: false
+    t.integer  "player_2_hand_id", null: false
+    t.integer  "winner_id",        null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "rounds", ["player_1_hand_id"], name: "index_rounds_on_player_1_hand_id"
+  add_index "rounds", ["player_2_hand_id"], name: "index_rounds_on_player_2_hand_id"
+  add_index "rounds", ["winner_id"], name: "index_rounds_on_winner_id"
 
 end

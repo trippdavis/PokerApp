@@ -1,10 +1,9 @@
 class Hand < ActiveRecord::Base
-  validates_presence_of :cards, :player_id, :round_id
-  before_save :parse_card_string
-  attr_accessor :card_values, :card_suits, :type
+  validates_presence_of :cards, :player_id, :hand_type
+  after_initialize :parse_card_string
+  attr_accessor :card_values, :card_suits, :hand_value
 
   belongs_to :player
-  belongs_to :round
 
   def parse_card_string
     cards_array = self.cards.split(" ")
@@ -27,7 +26,9 @@ class Hand < ActiveRecord::Base
     @card_values.sort!
 
     self.find_duplicate_values
-    @type = self.determine_type
+    hand_type = self.determine_type
+    @hand_value = hand_type[0]
+    self.hand_type = hand_type[1]
   end
 
   def find_duplicate_values
@@ -63,13 +64,13 @@ class Hand < ActiveRecord::Base
 
   def determine_type
     if @quads.length == 1
-      return "Four of a Kind"
+      return [7, "Four of a Kind"]
     elsif @trips.length == 1
-      return (@pairs.length == 1 ? "Full House" : "Three of a Kind")
+      return (@pairs.length == 1 ? [6, "Full House"] : [3, "Three of a Kind"])
     elsif @pairs.length == 2
-      return "Two Pair"
+      return [2, "Two Pair"]
     elsif @pairs.length == 1
-      return "Pair"
+      return [1, "Pair"]
     end
     straight = (@card_values[1] - @card_values[0] == 1 &&
       @card_values[2] - @card_values[1] == 1 &&
@@ -83,13 +84,19 @@ class Hand < ActiveRecord::Base
     )
 
     if (straight && flush)
-      return (@card_values[-1] == 14 ? "Royal Flush" : "Straight Flush")
+      return (@card_values[-1] == 14 ? [9, "Royal Flush"] : [8, "Straight Flush"])
     elsif straight
-      return "Straight"
+      return [4, "Straight"]
     elsif flush
-      return "Flush"
+      return [5, "Flush"]
     end
 
-    "High Card"
+    [0, "High Card"]
+  end
+
+
+
+  def <=>(other)
+
   end
 end
