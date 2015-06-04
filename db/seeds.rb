@@ -1,7 +1,12 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+player1 = Player.create(name: "Player 1")
+player2 = Player.create(name: "Player 2")
+
+File.readlines("poker.txt").map{ |line| line.chomp }.each do |round|
+  cards = round.split(" ")
+  player1_hand = Hand.create(cards: cards[0..4].join(" "), player_id: 1)
+  player2_hand = Hand.create(cards: cards[5..9].join(" "), player_id: 2)
+  winner = (player1_hand <=> player2_hand)
+  round = Round.create(winner_id: (winner == 1 ? 1 : 2))
+  RoundHand.create(round_id: round.id, hand_id: player1_hand.id)
+  RoundHand.create(round_id: round.id, hand_id: player2_hand.id)
+end
